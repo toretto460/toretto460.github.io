@@ -1,0 +1,7 @@
+baseURL: 'http://example.org/'
+languageCode: 'en-us'
+title: "Simone's blog"
+theme: "papermod"
+params:
+  defaultTheme: light
+  
