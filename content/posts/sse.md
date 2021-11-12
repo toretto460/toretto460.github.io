@@ -13,8 +13,10 @@ Delivering real time notifications in the user browser make your application way
 
 
 Photo by [Adam Solomon](https://unsplash.com/@solomac?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/notification?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
-  
-This story starts in a meeting with your team.
+
+--------------------------------
+
+**This story starts in a meeting with your team**
 
 You currently work for a successful e-commerce company and you’re in the middle of a grooming meeting when the product owner asks you to implement the invoice PDF generation
 
@@ -23,7 +25,7 @@ You know that the invoice rendering is very long running job, it involves severa
 The invoice generation is something like:
 
 ```golang
-type Invoice struct{
+type Invoice struct {
     model.User
     model.Order
     model.Payment
@@ -31,6 +33,7 @@ type Invoice struct{
 
 g, ctx := errgroup.WithContext(ctx)
 invoice := Invoice{}
+
 g.Go(func() error {
     user, err := userService.Get("user-id")
     if err == nil {
@@ -73,7 +76,6 @@ To generate an invoice the invoice service needs to do several API call to the e
 So after a brainstorming your team decide that it's the right time to implement something to send a notification to the user. 🥳
 
 If you want to jump straight to the solution go to [Notify]({{< ref "sse.md#notify" >}}). 
-
 
 ### Sending notifications to the browser
 
