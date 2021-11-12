@@ -11,6 +11,9 @@ Delivering real time notifications in the user browser make your application way
 
 ![/imgs/adam-solomon-WHUDOzd5IYU-unsplash.jpg](/imgs/adam-solomon-WHUDOzd5IYU-unsplash.jpg)
 
+
+Photo by [Adam Solomon](https://unsplash.com/@solomac?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/notification?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+  
 This story starts in a meeting with your team.
 
 You currently work for a successful e-commerce company and you’re in the middle of a grooming meeting when the product owner asks you to implement the invoice PDF generation
