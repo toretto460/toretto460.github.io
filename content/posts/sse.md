@@ -1,18 +1,16 @@
 ---
-title: "Deliver notification in the user browser"
+title: "Deliver notifications in the user browser"
 date: 2021-11-12T15:25:11+02:00
 draft: false
 tags:
     - redis
     - golang
     - sse
+cover:
+    image: "/imgs/adam-solomon-WHUDOzd5IYU-unsplash.jpg"
+    relative: true
 ---
-Delivering real time notifications in the user browser make your application way more engaging and let the user quickly react to the events happening in the product.<!--more-->
-
-![/imgs/adam-solomon-WHUDOzd5IYU-unsplash.jpg](/imgs/adam-solomon-WHUDOzd5IYU-unsplash.jpg)
-
-
-Photo by [Adam Solomon](https://unsplash.com/@solomac?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/notification?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+Delivering real-time notifications in the user browser makes your application way more engaging and let the user quickly react to the events happening in the product.<!--more-->
 
 --------------------------------
 
@@ -20,7 +18,7 @@ Photo by [Adam Solomon](https://unsplash.com/@solomac?utm_source=unsplash&utm_me
 
 You currently work for a successful e-commerce company and you’re in the middle of a grooming meeting when the product owner asks you to implement the invoice PDF generation
 
-You know that the invoice rendering is very long running job, it involves several API calls to fetch all the required data.
+You know that invoice rendering is a very long-running job, it involves several API calls to fetch all the required data.
 
 The invoice generation is something like:
 
@@ -71,34 +69,34 @@ if err != nil {
 return pdf, nil
 ```
 
-To generate an invoice the invoice service needs to do several API call to the external services that owns the Payment, User, Order and so on... After that you can render the PDF using engine of your choice; You know, all that process may takes lots of time to complete the job.
+To generate an invoice the invoice service needs to do several API calls to the external services that own the Payment, User, Order and so on... After that you can render the PDF using the engine of your choice; You know, all that process may take lots of time to complete the job.
 
-So after a brainstorming your team decide that it's the right time to implement something to send a notification to the user. 🥳
+So after a brainstorming, your team decides that it's the right time to implement something to send a notification to the user. 🥳
 
 If you want to jump straight to the solution go to [Notify]({{< ref "sse.md#notify" >}}). 
 
 ### Sending notifications to the browser
 
 There are several ways to implement a notification system for a web application. The easy way is to go through a [polling](https://en.m.wikipedia.org/wiki/Polling_(computer_science)) strategy.
-Polling is not beautiful nor efficient because you need to get if there are new notifications at regular intervals and even worse if you have lot of users you flood your serve with a huge traffic.
+Polling is not beautiful nor efficient because you need to get if there are new notifications at regular intervals and even worse if you have a lot of users you flood your server with huge traffic.
 Despite of all the cons, a polling strategy can be good for small products with relatively low traffic.
 
 **Polling**
 
 - it's easy to implement
-- do not require persistent connection
+- do not require a persistent connection
 
 ## A more sophisticated solution
 
-If you’re still reading this post maybe you’re intested in a more sophisticated solution than the polling one. So we'll go deeper to the rabbit hole.
+If you’re still reading this post maybe you’re interested in a more sophisticated solution than the polling one. So we'll go deeper into the rabbit hole.
 
 ### Persistent connection
 
-One of the most significant feature that makes a polling implementation simple is that it do not rely on a persistent connection between the client and the server.
-Basically you just need to implement a `GET /notifications` API and let the client call it to fetch new notifications.
-The state is preserved in the server where we've hundreds of possibilities to store the notifcations; we can use a database, a cache, the filesystem or whatever system we want.
+One of the most significant features that makes a polling implementation simple is that it do not rely on a persistent connection between the client and the server.
+Basically, you just need to implement a `GET /notifications` API and let the client call it to fetch new notifications.
+The state is preserved in the server where we've hundreds of possibilities to store the notifcations; we can use a database, a cache, the filesystem, or whatever system we want.
 
-On the other hand if we don't want to flood the server with hundreds of requests to ask for notifications we need to setup a stable communication channel between the client and the server. Talking about HTTP this channel could be a persistent connection to be used to send messages to the client.
+On the other hand, if we don't want to flood the server with hundreds of requests to ask for notifications we need to set up a stable communication channel between the client and the server. Talking about HTTP this channel could be a persistent connection to be used to send messages to the client.
 
 ```bash
 ➜  ~ curl -v --keepalive http://localhost:3000/open?channel=test
@@ -118,8 +116,8 @@ On the other hand if we don't want to flood the server with hundreds of requests
 < Transfer-Encoding: chunked
 ```
 
-The [HTTP / 1.1](https://en.wikipedia.org/wiki/HTTP_persistent_connection) version of the protocol supports the persistent connections, basically every connection is threated as persistent unless the client (or the server) sends a `Connection: close` header.
-This can be a very useful approach to keep the number of new opened connection under control, even more so we have thousands of clients that needs to receive notifications and constantly ping the server to ask for them.
+The [HTTP / 1.1](https://en.wikipedia.org/wiki/HTTP_persistent_connection) version of the protocol supports the persistent connections, basically every connection is treated as persistent unless the client (or the server) sends a `Connection: close` header.
+This can be a very useful approach to keep the number of newly opened connection under control, even more so we have thousands of clients that need to receive notifications and constantly ping the server to ask for them.
 
 ### Server Sent Events - SSE
 
@@ -128,7 +126,7 @@ Beside the classic HTTP request <-> response flow that allows the client to send
 
 ### Implementing in golang
 
-Thanks to the powerful stdlib it's very easy implement SSE in golang, you can write data over the response writer and flush it to send them to the client.
+Thanks to the powerful stdlib it's very easy to implement SSE in golang, you can write data over the response writer and flush it to send them to the client.
 
 ```go
 func(w http.ResponseWriter, r *http.Request) {
@@ -159,15 +157,15 @@ func(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-But in a real world scenario that snippet could be not enough, you may need a more sophisticated solution for a cloud native app that requires:
+But in a real-world scenario that snippet could be not enough, you may need a more sophisticated solution for a cloud-native app that requires:
 
-- orizontal scaling throught containers
+- horizontal scaling through containers
 - release new versions with a [blue/geen deployment](https://en.wikipedia.org/wiki/Blue-green_deployment)
 
 ### Notify {#notify}
 
-Notify is a golang library that condensates all this concepts, it allows to **send server events** to the browser with ease.
-https://github.com/toretto460/notify is easy to use; it supports Redis as a backend to publish and subscribe on events.
+Notify is a golang library that condensates all these concepts, it allows to **send server events** to the browser with ease.
+https://github.com/toretto460/notify is easy to use; it supports Redis as a backend to publish and subscribe to events.
 
 [https://github.com/toretto460/notify](https://github.com/toretto460/notify/blob/main/example/web/main.go)
 
@@ -220,10 +218,9 @@ func main() {
 }
 ```
 
-And then you can listen for message in the browser
+And then you can listen for messages in the browser
 
-```jsx
-let msgId = 0
+```js
 const channel = "test-channel-id"
 const source = new EventSource("http://localhost:3000/listen?channel=" + channel)
 
@@ -234,4 +231,8 @@ source.addEventListener('test-message', (event) => {
 
 Disclaimer
 
-As per today 11/11/2021 the notify library is still not used in production. Fill a PR or open a discussion here [https://github.com/toretto460/notify/issues](https://github.com/toretto460/notify/issues) for any issue.
+As of today 11/11/2021 the notify library is still not used in production. Fill a PR or open a discussion here [https://github.com/toretto460/notify/issues](https://github.com/toretto460/notify/issues) for any issue.
+
+{{% small %}}
+Cover photo by [Adam Solomon](https://unsplash.com/@solomac?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/s/photos/notification?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+{{% /small %}}
