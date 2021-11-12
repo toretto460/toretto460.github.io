@@ -4,4 +4,8 @@ title: "Simone's blog"
 theme: "papermod"
 params:
   defaultTheme: light
-  
+  github: toretto460
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
